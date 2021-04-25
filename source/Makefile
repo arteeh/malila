@@ -9,15 +9,18 @@ STLINK_VERSION ?= 2
 
 # Packages
 #USEPKG += micropython
+#USEPKG += lvgl
 
 # Built-in modules
 USEMODULE += xtimer
-USEMODULE += cst816s
+#USEMODULE += cst816s
 
 # Add modules folder to compile custom modules
-EXTERNAL_MODULE_DIRS += modules/graphics
+EXTERNAL_MODULE_DIRS += modules/display
+EXTERNAL_MODULE_DIRS += modules/gui
 
 # Custom modules
-USEMODULE += graphics
+USEMODULE += display
+USEMODULE += gui
 
 include $(RIOTBASE)/Makefile.include

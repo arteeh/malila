@@ -1,4 +1,9 @@
-#include <graphics.h>
+#include "display.h"
+
+ili9341_t display;
+
+uint8_t buffer[240][240];
+uint8_t bufferNext[240][240];
 
 void displayInit(void)
 {
