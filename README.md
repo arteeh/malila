@@ -8,5 +8,5 @@ A simple smartwatch operating system based on [RIOT](https://www.riot-os.org/), 
 - Open a terminal in the repository
 - Run `git submodule init`
 - Run `git submodule update`
-- Enter the src folder
+- Enter the `source` folder
 - run `make`
