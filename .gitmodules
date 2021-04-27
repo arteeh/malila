@@ -1,3 +1,6 @@
 [submodule "source/riot"]
 	path = source/riot
 	url = https://github.com/riot-os/riot.git
+[submodule "design"]
+	path = design
+	url = https://github.com/arteeh/pinetime
