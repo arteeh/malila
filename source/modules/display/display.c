@@ -1,14 +1,21 @@
 #include "display.h"
 
 ili9341_t display;
+screen_dev_t screen;
 
 uint8_t buffer[240][240];
 uint8_t bufferNext[240][240];
 
 void displayInit(void)
 {
-	BACKLIGHT_ON;
+	screen.display = (disp_dev_t *)&display;
+	screen.display -> driver = &ili9341_disp_dev_driver;
+
+	disp_dev_backlight_on();
+
 	ili9341_init(&display, &ili9341_params[0]);
+	
+	ili9341_fill(&display,0,240,0,240,0);
 }
 
 void displaySetBrightness(uint8_t brightness)

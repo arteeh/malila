@@ -3,6 +3,7 @@
 #include <cst816s.h>
 
 #include <display.h>
+#include <gui.h>
 
 int main(void)
 {
@@ -17,6 +18,8 @@ int main(void)
 	
 	displayInit();
 	displaySetBrightness(HIGH);
+	
+	guiInit();
 	
 	while(1)
 	{
