@@ -1,9 +1,4 @@
-#include <xtimer.h>
-#include <board.h>
-#include <cst816s.h>
-
-#include <display.h>
-#include <gui.h>
+#include "main.h"
 
 int main(void)
 {
@@ -17,9 +12,19 @@ int main(void)
 	gpio_set(VIBRATOR);
 	
 	displayInit();
-	displaySetBrightness(HIGH);
+	displaySetBrightness(100);
 	
-	guiInit();
+	graphicsInit();
+	
+	thread_create(
+		threadDisplayUpdateStack,
+		sizeof(threadDisplayUpdateStack),
+		THREAD_PRIORITY_MAIN - 1,
+		THREAD_CREATE_STACKTEST,
+		threadDisplayUpdate,
+		NULL,
+		NULL
+	);
 	
 	while(1)
 	{
@@ -27,4 +32,15 @@ int main(void)
 	}
 	
 	return 0;
+}
+
+void *threadDisplayUpdate(void *arg)
+{
+	(void) arg;
+
+	while(true)
+	{
+		displayUpdate();
+		xtimer_msleep(16);
+	}
 }
