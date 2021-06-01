@@ -1,10 +1,5 @@
 #include "display.h"
 
-#define BLACK	0x0000 // 0
-#define DARK	0x3fff // 65535 / 4
-#define LIGHT	0x7fff // 65535 / 4 * 2
-#define WHITE	0xffff // 65535
-
 ili9341_t display;
 screen_dev_t screen;
 
@@ -93,7 +88,7 @@ void displayUpdate(void)
 }
 
 // Write a pixel to the next frame
-void displayWritePixel(uint8_t x, uint8_t y, uint8_t color)
+void displayWrite(uint8_t x, uint8_t y, uint8_t color)
 {
 	// shift the two bits in the right spot in the byte
 	color = color << (6 - (x % 4));
