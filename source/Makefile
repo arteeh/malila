@@ -1,5 +1,4 @@
 APPLICATION = malila
-BOARD ?= pinetime
 RIOTBASE ?= riot
 
 # Packages

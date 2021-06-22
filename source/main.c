@@ -2,16 +2,17 @@
 
 int main(void)
 {
-	xtimer_msleep(3000);	
-	
+#if BOARD == native
+	printf("init\n");
+#elif BOARD == pinetime
 	gpio_init(VCC33, GPIO_OUT);
 	gpio_init(BUTTON0_ENABLE, GPIO_OUT);
 	gpio_init(BUTTON0, GPIO_IN);
 	gpio_init(VIBRATOR, GPIO_OUT);
-
 	gpio_set(VCC33);
 	gpio_set(BUTTON0_ENABLE);
-	gpio_set(VIBRATOR);	
+	gpio_set(VIBRATOR);
+#endif
 	
 	displayinit();
 	displaybrightness(100);
@@ -27,23 +28,25 @@ int main(void)
 		NULL,
 		NULL
 	);
-
+	
 	while(1)
 	{
-		for(uint8_t c = 0 ; c < 3 ; c++)
+#if BOARD == native
+#elif BOARD == pinetime
+		ili9341_fill(&display,0,240,0,240,0x0000);
+#endif
+		for(uint8_t c = 0 ; c <= 3 ; c++)
 		{
-			for(uint8_t i = 0 ; i < 230 ; i++)
+			for(uint8_t y = 0 ; y < 240 ; y++)
 			{
-				for(uint8_t j = 0 ; j < 230 ; j++)
+				for(uint8_t x = 0 ; x < 240 ; x++)
 				{
-					displaywrite(j,i,c);
+					displaywrite(x,y,c);
 				}
 			}
+			xtimer_msleep(2000);
 		}
-		
-		
-		//graphicsrectangle(50,50,50,50,2);
-		xtimer_msleep(1000);
+		xtimer_msleep(500);
 	}
 	
 	return 0;
@@ -56,6 +59,6 @@ void *threaddisplayupdate(void *arg)
 	while(true)
 	{
 		displayupdate();
-		xtimer_msleep(16);
+		xtimer_msleep(400);
 	}
 }
