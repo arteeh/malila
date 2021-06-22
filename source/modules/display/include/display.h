@@ -18,7 +18,7 @@ extern screen_dev_t screen;
 void displayinit(void);
 void displaybrightness(uint8_t newbrightness);
 void displayupdate(void);
-void displaywrite(uint8_t x,uint8_t y,uint8_t color);
-uint8_t displayread(uint8_t frame[60][240],uint8_t x,uint8_t y);
+void displaywrite(uint8_t x , uint8_t y , uint8_t color);
+uint8_t displayread(uint8_t frame[60][240] , uint8_t x , uint8_t y);
 
-#endif // DISPLAY_H
+#endif // displayh

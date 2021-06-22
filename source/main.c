@@ -30,11 +30,11 @@ int main(void)
 
 	while(1)
 	{
-		for(uint8_t c = 0; c < 3; c++)
+		for(uint8_t c = 0 ; c < 3 ; c++)
 		{
-			for(uint8_t i = 0; i < 230; i++)
+			for(uint8_t i = 0 ; i < 230 ; i++)
 			{
-				for(uint8_t j = 0; j < 230; j++)
+				for(uint8_t j = 0 ; j < 230 ; j++)
 				{
 					displaywrite(j,i,c);
 				}
