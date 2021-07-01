@@ -1,5 +1,10 @@
 #!/bin/bash
 
+file24c=source/modules/graphics/cantarell24.c
+file64c=source/modules/graphics/cantarell64.c
+file24h=source/modules/graphics/include/cantarell24.h
+file64h=source/modules/graphics/include/cantarell64.h
+
 # For the clock
 
 python3	fontconverter/src/ttf2bmh.py				\
@@ -22,10 +27,93 @@ python3	fontconverter/src/ttf2bmh.py				\
 
 # Move the generated files
 
-cp	"source/Cantarell Regular/Cantarell Regular_24.h"	\
-	source/modules/graphics/include/cantarell24.h
-cp	"source/Cantarell Regular/Cantarell Regular_64.h"	\
-	source/modules/graphics/include/cantarell64.h
+cp "source/Cantarell Regular/Cantarell Regular_24.h" $file24c
+cp "source/Cantarell Regular/Cantarell Regular_64.h" $file64c
 	
 rm -r "source/Cantarell Regular"
 rm source/ttf2bmh.log
+
+# remove the comments
+
+sed -i '/Header/d' $file24c
+sed -i '/Header/d' $file64c
+sed -i '/Generated/d' $file24c
+sed -i '/Generated/d' $file64c
+sed -i '/Font/d' $file24c
+sed -i '/Font/d' $file64c
+
+# turn chars into uint8_t's
+
+sed -i -e 's/char/uint8_t/g' $file24c
+sed -i -e 's/char/uint8_t/g' $file64c
+
+# differentiate the arrays by font size, or there will be duplicates
+
+sed -i -e 's/bitmap/bitmap_24/g' $file24c
+sed -i -e 's/bitmap/bitmap_64/g' $file64c
+
+sed -i -e 's/uint8_t_width/char_width_24/g' $file24c
+sed -i -e 's/uint8_t_width/char_width_64/g' $file64c
+
+sed -i -e 's/uint8_t_addr/char_addr_24/g' $file24c
+sed -i -e 's/uint8_t_addr/char_addr_64/g' $file64c
+
+# add an empty newline at the end
+
+echo "" >> $file24c
+echo "" >> $file64c
+
+# automatically add the array size to each array
+
+echo "" > /tmp/addarraysizes
+while read line; do
+	count=$(awk -F"," '{print NF-1}' <<< "${line}")
+	count=$((count+1))
+	final=${line//[[]]/[$count]}
+	echo $final >> /tmp/addarraysizes
+done < $file24c
+mv /tmp/addarraysizes $file24c
+
+echo "" > /tmp/addarraysizes
+while read line; do
+	count=$(awk -F"," '{print NF-1}' <<< "${line}")
+	count=$((count+1))
+	final=${line//[[]]/[$count]}
+	echo $final >> /tmp/addarraysizes
+done < $file64c
+mv /tmp/addarraysizes $file64c
+
+# remove the char_addr line, it's not needed
+
+sed -i '/addr/d' $file24c
+sed -i '/addr/d' $file64c
+
+# create the .h files
+
+echo "#ifndef cantarell24h"		> $file24h
+echo "#ifndef cantarell64h"		> $file64h
+echo "#define cantarell24h"		>> $file24h
+echo "#define cantarell64h"		>> $file64h
+echo ""					>> $file24h
+echo ""					>> $file64h
+echo '#include <stdint.h>'		>> $file24h
+echo '#include <stdint.h>'		>> $file64h
+echo "$(<$file24c)"			>> $file24h
+echo "$(<$file64c)"			>> $file64h
+sed -i 's/ = .*/;/' $file24h
+sed -i 's/ = .*/;/' $file64h
+echo ""					>> $file24h
+echo ""					>> $file64h
+echo "#endif // cantarell24h"		>> $file24h
+echo "#endif // cantarell64h"		>> $file64h
+echo ""					>> $file24h
+echo ""					>> $file64h
+sed -i -e 's/const/extern const/g' $file24h
+sed -i -e 's/const/extern const/g' $file64h
+
+# add .h include to .c
+
+printf '#include "cantarell24.h"\n' | cat - $file24c > /tmp/out && mv /tmp/out $file24c
+printf '#include "cantarell64.h"\n' | cat - $file64c > /tmp/out && mv /tmp/out $file64c
+
+
