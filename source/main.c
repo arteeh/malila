@@ -3,7 +3,6 @@
 int main(void)
 {
 #if BOARD == native
-	printf("init\n");
 #elif BOARD == pinetime
 	gpio_init(VCC33, GPIO_OUT);
 	gpio_init(BUTTON0_ENABLE, GPIO_OUT);
@@ -17,7 +16,7 @@ int main(void)
 	displayinit();
 	displaybrightness(100);
 	
-	//graphicsinit();
+	graphicsinit();
 	
 	thread_create(
 		threaddisplayupdatestack,
@@ -29,12 +28,10 @@ int main(void)
 		NULL
 	);
 	
-	while(1)
+	while(true)
 	{
-#if BOARD == native
-#elif BOARD == pinetime
-		ili9341_fill(&display,0,240,0,240,0x0000);
-#endif
+		graphicsclear();
+		
 		for(uint8_t c = 0 ; c <= 3 ; c++)
 		{
 			for(uint8_t y = 0 ; y < 240 ; y++)
@@ -46,7 +43,7 @@ int main(void)
 			}
 			xtimer_msleep(2000);
 		}
-		xtimer_msleep(500);
+		xtimer_msleep(5000);
 	}
 	
 	return 0;

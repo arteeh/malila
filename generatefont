@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# For the clock
+
+python3	fontconverter/src/ttf2bmh.py				\
+	--ttf_folder		cantarell/			\
+	--font			"Cantarell Regular"		\
+	--output_folder		source				\
+	--fontsize		64				\
+	--offset		16				\
+	--characters		"0123456789:"
+
+# For all other text
+
+python3	fontconverter/src/ttf2bmh.py				\
+	--ttf_folder		cantarell/			\
+	--font			"Cantarell Regular"		\
+	--output_folder		source				\
+	--fontsize		24				\
+	--offset		8				\
+	--ascii
+
+# Move the generated files
+
+cp	"source/Cantarell Regular/Cantarell Regular_24.h"	\
+	source/modules/graphics/include/cantarell24.h
+cp	"source/Cantarell Regular/Cantarell Regular_64.h"	\
+	source/modules/graphics/include/cantarell64.h
+	
+rm -r "source/Cantarell Regular"
+rm source/ttf2bmh.log

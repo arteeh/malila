@@ -4,3 +4,9 @@
 [submodule "design"]
 	path = design
 	url = https://github.com/arteeh/pinetime
+[submodule "font-converter"]
+	path = font-converter
+	url = https://github.com/jdmorise/TTF2BMH.git
+[submodule "fontconverter"]
+	path = fontconverter
+	url = https://github.com/jdmorise/TTF2BMH.git
