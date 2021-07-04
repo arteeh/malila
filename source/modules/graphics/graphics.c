@@ -20,17 +20,20 @@ void graphicsrectangle(uint8_t x, uint8_t y, uint8_t width, uint8_t length, uint
 		}
 	}
 }
-/*
+
 void graphicscharacter(char c, enum textsize ts, uint8_t x, uint8_t y)
 {
 	if(ts == small)
 	{
-		
+		c = c - 32;
+		const uint8_t charbitmap[54] = cantarell24[c];
 	}
 	else
 	{
-		
+		c = c - 48;
+		const uint8_t charbitmap[384] = cantarell64[c];
 	}
+	
+	
 }
-*/
 

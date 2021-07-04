@@ -5,6 +5,8 @@
 #include "cantarell24.h"
 #include "cantarell64.h"
 
+#define charsmall(c) bitmap_24_c
+
 // font size
 enum textsize{small,big};
 

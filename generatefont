@@ -42,78 +42,71 @@ sed -i '/Generated/d' $file64c
 sed -i '/Font/d' $file24c
 sed -i '/Font/d' $file64c
 
-# turn chars into uint8_t's
+# remove the char_addr and char_width lines, they're not needed
 
-sed -i -e 's/char/uint8_t/g' $file24c
-sed -i -e 's/char/uint8_t/g' $file64c
+sed -i '/addr/d' $file24c
+sed -i '/addr/d' $file64c
+sed -i '/width/d' $file24c
+sed -i '/width/d' $file64c
 
-# differentiate the arrays by font size, or there will be duplicates
+# remove everything before the character '{'
 
-sed -i -e 's/bitmap/bitmap_24/g' $file24c
-sed -i -e 's/bitmap/bitmap_64/g' $file64c
+sed -i -e 's/^[^{]*=//' $file24c
+sed -i -e 's/^[^{]*=//' $file64c
 
-sed -i -e 's/uint8_t_width/char_width_24/g' $file24c
-sed -i -e 's/uint8_t_width/char_width_64/g' $file64c
+# replace the space(?) before { with a tab
 
-sed -i -e 's/uint8_t_addr/char_addr_24/g' $file24c
-sed -i -e 's/uint8_t_addr/char_addr_64/g' $file64c
+sed -i -e 's/ {/\t{/g' $file24c
+sed -i -e 's/ {/\t{/g' $file64c
+
+# these arrays will be in an array, replace ; with ,
+
+sed -i -e 's/;/,/g' $file24c
+sed -i -e 's/;/,/g' $file64c
+
+# remove the , behind the last item
+
+sed -i -e '$ s/.$//' $file24c
+sed -i -e '$ s/.$//' $file64c
+
+# Prepend the array name
+
+printf 'const uint8_t cantarell24[95][54] = {\n' | cat - $file24c > /tmp/out && mv /tmp/out $file24c
+printf 'const uint8_t cantarell64[11][384] = {\n' | cat - $file64c > /tmp/out && mv /tmp/out $file64c
+
+# Close the array
+
+echo "};" >> $file24c
+echo "};" >> $file64c
 
 # add an empty newline at the end
 
 echo "" >> $file24c
 echo "" >> $file64c
 
-# automatically add the array size to each array
+# prepend inclusion of .h
 
-echo "" > /tmp/addarraysizes
-while read line; do
-	count=$(awk -F"," '{print NF-1}' <<< "${line}")
-	count=$((count+1))
-	final=${line//[[]]/[$count]}
-	echo $final >> /tmp/addarraysizes
-done < $file24c
-mv /tmp/addarraysizes $file24c
-
-echo "" > /tmp/addarraysizes
-while read line; do
-	count=$(awk -F"," '{print NF-1}' <<< "${line}")
-	count=$((count+1))
-	final=${line//[[]]/[$count]}
-	echo $final >> /tmp/addarraysizes
-done < $file64c
-mv /tmp/addarraysizes $file64c
-
-# remove the char_addr line, it's not needed
-
-sed -i '/addr/d' $file24c
-sed -i '/addr/d' $file64c
+printf '#include "cantarell24.h"\n\n' | cat - $file24c > /tmp/out && mv /tmp/out $file24c
+printf '#include "cantarell64.h"\n\n' | cat - $file64c > /tmp/out && mv /tmp/out $file64c
 
 # create the .h files
 
-echo "#ifndef cantarell24h"		> $file24h
-echo "#ifndef cantarell64h"		> $file64h
-echo "#define cantarell24h"		>> $file24h
-echo "#define cantarell64h"		>> $file64h
-echo ""					>> $file24h
-echo ""					>> $file64h
-echo '#include <stdint.h>'		>> $file24h
-echo '#include <stdint.h>'		>> $file64h
-echo "$(<$file24c)"			>> $file24h
-echo "$(<$file64c)"			>> $file64h
-sed -i 's/ = .*/;/' $file24h
-sed -i 's/ = .*/;/' $file64h
-echo ""					>> $file24h
-echo ""					>> $file64h
-echo "#endif // cantarell24h"		>> $file24h
-echo "#endif // cantarell64h"		>> $file64h
-echo ""					>> $file24h
-echo ""					>> $file64h
-sed -i -e 's/const/extern const/g' $file24h
-sed -i -e 's/const/extern const/g' $file64h
-
-# add .h include to .c
-
-printf '#include "cantarell24.h"\n' | cat - $file24c > /tmp/out && mv /tmp/out $file24c
-printf '#include "cantarell64.h"\n' | cat - $file64c > /tmp/out && mv /tmp/out $file64c
-
+echo "#ifndef cantarell24h"				> $file24h
+echo "#ifndef cantarell64h"				> $file64h
+echo "#define cantarell24h"				>> $file24h
+echo "#define cantarell64h"				>> $file64h
+echo ""							>> $file24h
+echo ""							>> $file64h
+echo '#include <stdint.h>'				>> $file24h
+echo '#include <stdint.h>'				>> $file64h
+echo ""							>> $file24h
+echo ""							>> $file64h
+echo "extern const uint8_t cantarell24[95][54];"	>> $file24h
+echo "extern const uint8_t cantarell64[11][384];"	>> $file64h
+echo ""							>> $file24h
+echo ""							>> $file64h
+echo "#endif // cantarell24h"				>> $file24h
+echo "#endif // cantarell64h"				>> $file64h
+echo ""							>> $file24h
+echo ""							>> $file64h
 
