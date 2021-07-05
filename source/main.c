@@ -32,18 +32,15 @@ int main(void)
 	{
 		graphicsclear();
 		
-		for(uint8_t c = 0 ; c <= 3 ; c++)
-		{
-			for(uint8_t y = 0 ; y < 240 ; y++)
-			{
-				for(uint8_t x = 0 ; x < 240 ; x++)
-				{
-					displaywrite(x,y,c);
-				}
-			}
-			xtimer_msleep(2000);
-		}
-		xtimer_msleep(5000);
+		graphicscharacter(10,150,'_',small,2);
+		graphicscharacter(40,150,'-',small,2);
+		graphicscharacter(70,150,'+',small,2);
+		
+		graphicscharacter(10,200,'|',small,2);
+		graphicscharacter(40,200,'`',small,2);
+		graphicscharacter(70,200,'.',small,2);
+		
+		xtimer_msleep(3000);
 	}
 	
 	return 0;
@@ -56,6 +53,6 @@ void *threaddisplayupdate(void *arg)
 	while(true)
 	{
 		displayupdate();
-		xtimer_msleep(400);
+		xtimer_msleep(1000);
 	}
 }

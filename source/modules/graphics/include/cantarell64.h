@@ -3,7 +3,12 @@
 
 #include <stdint.h>
 
-extern const uint8_t cantarell64[11][384];
+#define cantarell64characters	11
+#define cantarell64size		384
+#define cantarell64asciioffset	48
+
+extern const uint8_t cantarell64[cantarell64characters][cantarell64size];
+extern const uint8_t cantarell64width[cantarell64characters];
 
 #endif // cantarell64h
 

@@ -30,7 +30,7 @@ python3	fontconverter/src/ttf2bmh.py				\
 cp "source/Cantarell Regular/Cantarell Regular_24.h" $file24c
 cp "source/Cantarell Regular/Cantarell Regular_64.h" $file64c
 	
-rm -r "source/Cantarell Regular"
+#rm -r "source/Cantarell Regular"
 rm source/ttf2bmh.log
 
 # remove the comments
@@ -42,7 +42,17 @@ sed -i '/Generated/d' $file64c
 sed -i '/Font/d' $file24c
 sed -i '/Font/d' $file64c
 
-# remove the char_addr and char_width lines, they're not needed
+# add the array count to the width
+
+sed -i 's/char char_width\[/uint8_t cantarell24width\[cantarell24characters/g' $file24c
+sed -i 's/char char_width\[/uint8_t cantarell64width\[cantarell64characters/g' $file64c
+
+# extract the widths variable
+
+widths24=$(grep 'cantarell24width' $file24c)
+widths64=$(grep 'cantarell64width' $file64c)
+
+# remove the char_addr and char_width lines
 
 sed -i '/addr/d' $file24c
 sed -i '/addr/d' $file64c
@@ -71,13 +81,21 @@ sed -i -e '$ s/.$//' $file64c
 
 # Prepend the array name
 
-printf 'const uint8_t cantarell24[95][54] = {\n' | cat - $file24c > /tmp/out && mv /tmp/out $file24c
-printf 'const uint8_t cantarell64[11][384] = {\n' | cat - $file64c > /tmp/out && mv /tmp/out $file64c
+printf 'const uint8_t cantarell24[cantarell24characters][cantarell24size] = {\n' | cat - $file24c > /tmp/out && mv /tmp/out $file24c
+printf 'const uint8_t cantarell64[cantarell64characters][cantarell64size] = {\n' | cat - $file64c > /tmp/out && mv /tmp/out $file64c
 
 # Close the array
 
 echo "};" >> $file24c
 echo "};" >> $file64c
+
+# add an empty newline at the end
+
+echo "" >> $file24c
+echo "" >> $file64c
+
+echo $widths24 >> $file24c
+echo $widths64 >> $file64c
 
 # add an empty newline at the end
 
@@ -91,22 +109,32 @@ printf '#include "cantarell64.h"\n\n' | cat - $file64c > /tmp/out && mv /tmp/out
 
 # create the .h files
 
-echo "#ifndef cantarell24h"				> $file24h
-echo "#ifndef cantarell64h"				> $file64h
-echo "#define cantarell24h"				>> $file24h
-echo "#define cantarell64h"				>> $file64h
-echo ""							>> $file24h
-echo ""							>> $file64h
-echo '#include <stdint.h>'				>> $file24h
-echo '#include <stdint.h>'				>> $file64h
-echo ""							>> $file24h
-echo ""							>> $file64h
-echo "extern const uint8_t cantarell24[95][54];"	>> $file24h
-echo "extern const uint8_t cantarell64[11][384];"	>> $file64h
-echo ""							>> $file24h
-echo ""							>> $file64h
-echo "#endif // cantarell24h"				>> $file24h
-echo "#endif // cantarell64h"				>> $file64h
-echo ""							>> $file24h
-echo ""							>> $file64h
+echo "#ifndef cantarell24h"								> $file24h
+echo "#ifndef cantarell64h"								> $file64h
+echo "#define cantarell24h"								>> $file24h
+echo "#define cantarell64h"								>> $file64h
+echo ""											>> $file24h
+echo ""											>> $file64h
+echo '#include <stdint.h>'								>> $file24h
+echo '#include <stdint.h>'								>> $file64h
+echo ""											>> $file24h
+echo ""											>> $file64h
+echo "#define cantarell24characters	95"						>> $file24h
+echo "#define cantarell64characters	11"						>> $file64h
+echo "#define cantarell24size		54"						>> $file24h
+echo "#define cantarell64size		384"						>> $file64h
+echo "#define cantarell24asciioffset	32"						>> $file24h
+echo "#define cantarell64asciioffset	48"						>> $file64h
+echo ""											>> $file24h
+echo ""											>> $file64h
+echo "extern const uint8_t cantarell24[cantarell24characters][cantarell24size];"	>> $file24h
+echo "extern const uint8_t cantarell64[cantarell64characters][cantarell64size];"	>> $file64h
+echo "extern const uint8_t cantarell24width[cantarell24characters];"			>> $file24h
+echo "extern const uint8_t cantarell64width[cantarell64characters];"			>> $file64h
+echo ""											>> $file24h
+echo ""											>> $file64h
+echo "#endif // cantarell24h"								>> $file24h
+echo "#endif // cantarell64h"								>> $file64h
+echo ""											>> $file24h
+echo ""											>> $file64h
 
