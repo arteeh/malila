@@ -19,10 +19,10 @@
   (byte & 0x02 ? '1' : '0'), \
   (byte & 0x01 ? '1' : '0') 
 
-#define black	0x0000 // 0
-#define dark	0x3fff // 65535 / 4
-#define light	0x7fff // 65535 / 4 * 2
-#define white	0xffff // 65535
+#define black	0x0000 // 65535 / 3 * 0
+#define dark	0x5555 // 65535 / 3 * 1
+#define light	0xaaaa // 65535 / 3 * 2
+#define white	0xffff // 65535 / 3 * 3
 
 extern ili9341_t display;
 extern screen_dev_t screen;
