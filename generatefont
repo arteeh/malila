@@ -13,7 +13,8 @@ python3	fontconverter/src/ttf2bmh.py				\
 	--output_folder		source				\
 	--fontsize		64				\
 	--offset		16				\
-	--characters		"0123456789:"
+	--characters		"0123456789:"			\
+	--variable_width
 
 # For all other text
 
@@ -23,14 +24,15 @@ python3	fontconverter/src/ttf2bmh.py				\
 	--output_folder		source				\
 	--fontsize		24				\
 	--offset		8				\
-	--ascii
+	--ascii							\
+	--variable_width
 
 # Move the generated files
 
 cp "source/Cantarell Regular/Cantarell Regular_24.h" $file24c
 cp "source/Cantarell Regular/Cantarell Regular_64.h" $file64c
 	
-#rm -r "source/Cantarell Regular"
+rm -r "source/Cantarell Regular"
 rm source/ttf2bmh.log
 
 # remove the comments
@@ -44,8 +46,8 @@ sed -i '/Font/d' $file64c
 
 # add the array count to the width
 
-sed -i 's/char char_width\[/uint8_t cantarell24width\[cantarell24characters/g' $file24c
-sed -i 's/char char_width\[/uint8_t cantarell64width\[cantarell64characters/g' $file64c
+sed -i 's/char char_width\[/int8_t cantarell24width\[cantarell24characters/g' $file24c
+sed -i 's/char char_width\[/int8_t cantarell64width\[cantarell64characters/g' $file64c
 
 # extract the widths variable
 
@@ -129,8 +131,8 @@ echo ""											>> $file24h
 echo ""											>> $file64h
 echo "extern const uint8_t cantarell24[cantarell24characters][cantarell24size];"	>> $file24h
 echo "extern const uint8_t cantarell64[cantarell64characters][cantarell64size];"	>> $file64h
-echo "extern const uint8_t cantarell24width[cantarell24characters];"			>> $file24h
-echo "extern const uint8_t cantarell64width[cantarell64characters];"			>> $file64h
+echo "extern const int8_t cantarell24width[cantarell24characters];"			>> $file24h
+echo "extern const int8_t cantarell64width[cantarell64characters];"			>> $file64h
 echo ""											>> $file24h
 echo ""											>> $file64h
 echo "#endif // cantarell24h"								>> $file24h

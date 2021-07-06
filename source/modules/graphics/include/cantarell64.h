@@ -8,7 +8,7 @@
 #define cantarell64asciioffset	48
 
 extern const uint8_t cantarell64[cantarell64characters][cantarell64size];
-extern const uint8_t cantarell64width[cantarell64characters];
+extern const int8_t cantarell64width[cantarell64characters];
 
 #endif // cantarell64h
 

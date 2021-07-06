@@ -14,6 +14,7 @@ enum textsize{small,big};
 void graphicsinit(void);
 void graphicsclear(void);
 void graphicsrectangle(uint8_t x, uint8_t y, uint8_t width, uint8_t length, uint8_t color);
-void graphicscharacter(uint8_t x, uint8_t y, char c, enum textsize ts, uint8_t color);
+uint8_t graphicscharacter(uint8_t x, uint8_t y, char c, enum textsize ts, uint8_t color);
+//uint8_t graphicsstring(uint8_t x, uint8_t y, char c[], enum textsize ts, uint8_t color);
 
 #endif // graphicsh
