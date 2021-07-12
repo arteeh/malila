@@ -2,8 +2,7 @@
 
 int main(void)
 {
-#if BOARD == native
-#elif BOARD == pinetime
+#if BOARD == pinetime && BOARD != native
 	gpio_init(VCC33, GPIO_OUT);
 	gpio_init(BUTTON0_ENABLE, GPIO_OUT);
 	gpio_init(BUTTON0, GPIO_IN);

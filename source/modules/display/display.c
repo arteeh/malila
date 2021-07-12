@@ -17,8 +17,7 @@ void displayinit(void)
 		}
 	}
 	
-#if BOARD == native
-#elif BOARD == pinetime
+#if BOARD == pinetime
 	screen.display = (disp_dev_t *)&display;
 	screen.display -> driver = &ili9341_disp_dev_driver;
 
@@ -46,8 +45,7 @@ void displaybrightness(uint8_t newbrightness)
 	
 	if(newbrightness < 33)
 	{
-#if BOARD == native
-#elif BOARD == pinetime
+#if BOARD == pinetime && BOARD != native
 		gpio_clear(LCD_BACKLIGHT_LOW);
 		gpio_set(LCD_BACKLIGHT_MID);
 		gpio_set(LCD_BACKLIGHT_HIGH);
@@ -55,8 +53,7 @@ void displaybrightness(uint8_t newbrightness)
 	}
 	else if(33 <= newbrightness && newbrightness <= 66)
 	{
-#if BOARD == native
-#elif BOARD == pinetime
+#if BOARD == pinetime && BOARD != native
 		gpio_set(LCD_BACKLIGHT_LOW);
 		gpio_clear(LCD_BACKLIGHT_MID);
 		gpio_set(LCD_BACKLIGHT_HIGH);
@@ -64,8 +61,7 @@ void displaybrightness(uint8_t newbrightness)
 	}
 	else if(66 < newbrightness)
 	{
-#if BOARD == native
-#elif BOARD == pinetime
+#if BOARD == pinetime && BOARD != native
 		gpio_set(LCD_BACKLIGHT_LOW);
 		gpio_set(LCD_BACKLIGHT_MID);
 		gpio_clear(LCD_BACKLIGHT_HIGH);
@@ -77,7 +73,7 @@ void displaybrightness(uint8_t newbrightness)
 
 void displayupdate(void)
 {
-#if BOARD == native
+#if BOARD != pinetime && BOARD == native
 	// Clear the screen
 	printf("\033[2J");
 #endif
@@ -86,7 +82,7 @@ void displayupdate(void)
 		for(uint8_t x = 0 ; x < 240 ; x++)
 		{
 			uint8_t next = displayread(nextframe,x,y);
-#if BOARD == native
+#if BOARD != pinetime && BOARD == native
 			switch(next)
 			{
 				case 0:
@@ -106,7 +102,8 @@ void displayupdate(void)
 					printf("\033[0m");
 					break;
 			}
-#elif BOARD == pinetime
+#endif
+#if BOARD == pinetime && BOARD != native
 			uint8_t curr = displayread(currentframe,x,y);
 			if(curr != next)
 			{
@@ -129,7 +126,7 @@ void displayupdate(void)
 			}
 #endif
 		}
-#if BOARD == native
+#if BOARD != pinetime && BOARD == native
 		printf("\n");
 #endif
 	}
