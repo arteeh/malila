@@ -1,4 +1,8 @@
-### Malila is a smartwatch OS for Linux phones. It's based on [RIOT](https://www.riot-os.org/) and runs on the [PineTime](https://www.pine64.org/pinetime/).
+#### Malila is a smartwatch OS for Linux phones.
+
+It's based on [RIOT](https://www.riot-os.org/) and runs on the [PineTime](https://www.pine64.org/pinetime/). It's an implementation of [these](https://github.com/arteeh/pinetime) GNOME-style mockups.
+
+Adwaita, GNOME's design language, is named after [the oldest tortoise in history](https://en.wikipedia.org/wiki/Adwaita). Malila is named after [the second](https://en.wikipedia.org/wiki/Tu%27i_Malila).
 
 ## How to build
 
