@@ -1,6 +1,4 @@
-# Malila
-
-A smartwatch operating system made for the [Pinetime](https://www.pine64.org/pinetime/). Uses [RIOT](https://www.riot-os.org/).
+### Malila is a watch operating system for Linux phones. It's based on [RIOT](https://www.riot-os.org/) and runs on the [Pinetime](https://www.pine64.org/pinetime/).
 
 ## How to build
 
