@@ -1,15 +1,13 @@
+WERROR=0
 APPLICATION = malila
 RIOTBASE ?= riot
-BOARD=pinetime
-
-# Packages
-USEPKG += lvgl
-#USEPKG += micropython
-
-# Modules including custom ones
-USEMODULE += xtimer
 
 # Add modules folder to compile custom modules
 EXTERNAL_MODULE_DIRS += modules
+
+# Modules including custom ones
+USEMODULE += xtimer
+USEMODULE += common
+USEMODULE += graphics
 
 include $(RIOTBASE)/Makefile.include

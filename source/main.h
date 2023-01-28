@@ -1,3 +1,4 @@
-#include <xtimer.h>
 #include <board.h>
-#include <cst816s.h>
+#include <xtimer.h>
+#include "common.h"
+#include "graphics.h"

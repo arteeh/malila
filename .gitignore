@@ -1,8 +1,8 @@
-# Binaries
-source/bin/
+# All of RIOT's build artifacts are in the source/bin folder.
+bin/
 
-# Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,c
-# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,c
+# Created by https://www.toptal.com/developers/gitignore/api/c,visualstudiocode
+# Edit at https://www.toptal.com/developers/gitignore?templates=c,visualstudiocode
 
 ### C ###
 # Prerequisites
@@ -77,4 +77,4 @@ dkms.conf
 .history
 .ionide
 
-# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,c
+# End of https://www.toptal.com/developers/gitignore/api/c,visualstudiocode
